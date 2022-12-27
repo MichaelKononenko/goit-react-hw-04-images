@@ -19,25 +19,25 @@ export const App = () =>{
     const [noMorePhoto, setNoMorePhotoFlag] = useState(false);
     const [totalHits, setTotalHits] = useState(0);
 
-    async function fetchPhotos() {        
-        if(!toSearch) return;
-
-        try{
-        setLoadingFlag(true);
-        const response = await axios.get(`?q=${toSearch}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`);
-        console.log(response.data);
-        setData(prevData => [...prevData, ...response.data.hits]);
-        setLoadingFlag(false);
-        setTotalHits(response.data.total);
-
-        response.data.hits.length < 12 ? setNoMorePhotoFlag(true) : setNoMorePhotoFlag(false) ;
-        }catch{
-            setNoMorePhotoFlag(true);
-            setLoadingFlag(false);
-        }
-      }
 
     useEffect(() => {
+        async function fetchPhotos() {        
+            if(!toSearch) return;
+    
+            try{
+            setLoadingFlag(true);
+            const response = await axios.get(`?q=${toSearch}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`);
+            console.log(response.data);
+            setData(prevData => [...prevData, ...response.data.hits]);
+            setLoadingFlag(false);
+            setTotalHits(response.data.total);
+    
+            response.data.hits.length < 12 ? setNoMorePhotoFlag(true) : setNoMorePhotoFlag(false) ;
+            }catch{
+                setNoMorePhotoFlag(true);
+                setLoadingFlag(false);
+            }
+          }
       fetchPhotos();
     }, [toSearch,  page]);
 
